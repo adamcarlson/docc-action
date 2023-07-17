@@ -39,7 +39,7 @@ runs:
 
         # Transform for static hosting
         cmd() {
-          echo "$ARCHIVE" | awk -F'.' '{print $(NF-1)}' | awk -F'/' '{print tolower($2)}'
+          echo "$ARCHIVE" | awk -F'/' '{print tolower($NF)}' | awk -F'.' '{print $(1)}'
         }
         ARCHIVE_NAME="$(cmd)"
 
