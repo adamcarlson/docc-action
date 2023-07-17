@@ -43,10 +43,10 @@ runs:
         }
         ARCHIVE_NAME="$(cmd)"
 
-        mkdir $BUILD_DIR/docs
+        mkdir $RUNNER_TEMP/docs
 
-        DOCC_OUTPUT_PATH=$BUILD_DIR/docs/$ARCHIVE_NAME
-        INDEX_FILENAME=$BUILD_DIR/docs/index.html
+        DOCC_OUTPUT_PATH=$RUNNER_TEMP/docs/$ARCHIVE_NAME
+        INDEX_FILENAME=$RUNNER_TEMP/docs/index.html
 
         $(xcrun --find docc) process-archive transform-for-static-hosting "$ARCHIVE" \
           --output-path $DOCC_OUTPUT_PATH
@@ -74,7 +74,7 @@ runs:
     - name: Upload Pages artifact
       uses: actions/upload-pages-artifact@v2
       with:
-        path: build/docs
+        path: ${{ env.RUNNER_TEMP }}/docs
 
     - name: Publish to Pages
       uses: actions/deploy-pages@v2
