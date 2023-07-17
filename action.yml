@@ -26,7 +26,8 @@ runs:
 
         xcodebuild docbuild \
           -scheme $INPUT_SCHEME \
-          -derivedDataPath $BUILD_DIR
+          -derivedDataPath $BUILD_DIR \
+          -allowProvisioningUpdates
       env:
         INPUT_SCHEME: ${{ inputs.scheme }}
 
