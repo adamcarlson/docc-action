@@ -48,6 +48,8 @@ runs:
         DOCC_OUTPUT_PATH=$RUNNER_TEMP/docs/$ARCHIVE_NAME
         INDEX_FILENAME=$RUNNER_TEMP/docs/index.html
 
+         echo "DOCS_PATH=$(RUNNER_TEMP)/docs" >> $GITHUB_ENV
+
         $(xcrun --find docc) process-archive transform-for-static-hosting "$ARCHIVE" \
           --output-path $DOCC_OUTPUT_PATH
 
@@ -74,7 +76,7 @@ runs:
     - name: Upload Pages artifact
       uses: actions/upload-pages-artifact@v2
       with:
-        path: ${{ env.RUNNER_TEMP }}/docs
+        path: ${{ env.DOCS_PATH }}
 
     - name: Publish to Pages
       uses: actions/deploy-pages@v2
