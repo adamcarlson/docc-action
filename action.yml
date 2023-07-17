@@ -9,8 +9,7 @@ inputs:
     description: "xcode scheme to publish"
     required: true
   base_pages_url:
-    description: "base url for "
-    default: ""
+    description: "base url for the pages repo"
     required: true
 runs:
   using: "composite"
@@ -74,11 +73,7 @@ runs:
     - name: Upload Pages artifact
       uses: actions/upload-pages-artifact@v2
       with:
-        name: docc-pages-artifact
         path: build/docs
 
     - name: Publish to Pages
       uses: actions/deploy-pages@v2
-        with:
-          artifact_name: docc-pages-artifact
-
