@@ -48,7 +48,7 @@ runs:
         DOCC_OUTPUT_PATH=$RUNNER_TEMP/docs/$ARCHIVE_NAME
         INDEX_FILENAME=$RUNNER_TEMP/docs/index.html
 
-         echo "DOCS_PATH=$(RUNNER_TEMP)/docs" >> $GITHUB_ENV
+         echo "DOCS_PATH=$RUNNER_TEMP/docs" >> $GITHUB_ENV
 
         $(xcrun --find docc) process-archive transform-for-static-hosting "$ARCHIVE" \
           --output-path $DOCC_OUTPUT_PATH
