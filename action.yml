@@ -37,6 +37,8 @@ runs:
         BUILD_DIR=$RUNNER_TEMP/build
         ARCHIVE=$(find $BUILD_DIR -type d -name '*.doccarchive')
 
+        echo "$ARCHIVE"
+
         # Transform for static hosting
         cmd() {
           echo "$ARCHIVE" | awk -F'.' '{print $1}' | awk -F'/' '{print tolower($2)}'
@@ -51,7 +53,7 @@ runs:
          echo "DOCS_PATH=$RUNNER_TEMP/docs" >> $GITHUB_ENV
 
         $(xcrun --find docc) process-archive transform-for-static-hosting "$ARCHIVE" \
-          --hosting-base-path $ARCHIVE_NAME \
+          --hosting-base-path flowCoordinatorInvestigation \
           --output-path $DOCC_OUTPUT_PATH
 
         # Make index.html
