@@ -1,0 +1,84 @@
+name: "Publish DocC to Gitub Pages"
+description: "A composite action that creates a DocC archive and publishes it to Github Pages"
+author: "acarlson"
+inputs:
+  branch:
+    description: "branch to build documentation from"
+    required: true
+  scheme:
+    description: "xcode scheme to publish"
+    required: true
+  base_pages_url:
+    description: "base url for "
+    default: ""
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout branch
+      uses: actions/checkout@v2
+      with:
+        ref: ${{ inputs.branch }}
+
+    - name: Create Archive
+      shell: sh
+      run: |
+        BUILD_DIR=$RUNNER_TEMP/build
+
+        xcodebuild docbuild \
+          -scheme $INPUT_SCHEME \
+          -derivedDataPath $BUILD_DIR
+      env:
+        INPUT_SCHEME: ${{ inputs.scheme }}
+
+    - name: Tansform for static hosting
+      shell: sh
+      run: |
+        BUILD_DIR=$RUNNER_TEMP/build
+        ARCHIVE=$(find $BUILD_DIR -type d -name '*.doccarchive')
+
+        # Transform for static hosting
+        cmd() {
+          echo "$ARCHIVE" | awk -F'.' '{print $1}' | awk -F'/' '{print tolower($2)}'
+        }
+        ARCHIVE_NAME="$(cmd)"
+
+        mkdir $BUILD_DIR/docs
+
+        DOCC_OUTPUT_PATH=$BUILD_DIR/docs/$ARCHIVE_NAME
+        INDEX_FILENAME=$BUILD_DIR/docs/index.html
+
+        $(xcrun --find docc) process-archive transform-for-static-hosting "$ARCHIVE" \
+          --output-path $DOCC_OUTPUT_PATH
+
+        # Make index.html
+        DOCS_URL=$INPUT_BASE_PAGES_URL/$ARCHIVE_NAME/documentation/$ARCHIVE_NAME/
+
+        cat > $INDEX_FILENAME << ENDOFFILE
+        <!DOCTYPE html>
+        <meta charset="utf-8">
+        <meta http-equiv="refresh" content="1; url=$DOCS_URL">
+        <script>
+          window.location.href = "$DOCS_URL"
+        </script>
+        <title>Redirecting...</title>
+        If you are not redirected automatically, follow
+        <a href="$DOCS_URL">
+          this link
+        </a>.
+
+      env:
+        INPUT_SCHEME: ${{ inputs.scheme }}
+        INPUT_BASE_PAGES_URL: ${{ inputs.base_pages_url }}
+
+    - name: Upload Pages artifact
+      uses: actions/upload-pages-artifact@v2
+      with:
+        name: docc-pages-artifact
+        path: build/docs
+
+    - name: Publish to Pages
+      uses: actions/deploy-pages@v2
+        with:
+          artifact_name: docc-pages-artifact
+
