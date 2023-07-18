@@ -9,9 +9,6 @@ inputs:
   scheme:
     description: "xcode scheme to publish"
     required: true
-  base_pages_url:
-    description: "base url for the pages repo"
-    required: true
 runs:
   using: "composite"
   steps:
@@ -73,7 +70,6 @@ runs:
 
       env:
         INPUT_SCHEME: ${{ inputs.scheme }}
-        INPUT_BASE_PAGES_URL: ${{ inputs.base_pages_url }}
         INPUT_REPO_NAME: ${{ github.event.repository.name }}
 
     - name: Upload Pages artifact
