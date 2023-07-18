@@ -56,7 +56,7 @@ runs:
           --output-path $DOCC_OUTPUT_PATH
 
         # Make index.html
-        DOCS_URL=$INPUT_BASE_PAGES_URL$ARCHIVE_NAME/documentation/$ARCHIVE_NAME/
+        DOCS_URL=./$ARCHIVE_NAME/documentation/$ARCHIVE_NAME/
 
         cat > $INDEX_FILENAME << ENDOFFILE
         <!DOCTYPE html>
