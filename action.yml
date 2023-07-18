@@ -51,7 +51,7 @@ runs:
          echo "DOCS_PATH=$RUNNER_TEMP/docs" >> $GITHUB_ENV
 
         $(xcrun --find docc) process-archive transform-for-static-hosting "$ARCHIVE" \
-          --hosting-base-path flowCoordinatorInvestigation/$ARCHIVE_NAME \
+          --hosting-base-path $INPUT_REPO_NAME/$ARCHIVE_NAME \
           --output-path $DOCC_OUTPUT_PATH
 
         # Make index.html
@@ -73,6 +73,7 @@ runs:
       env:
         INPUT_SCHEME: ${{ inputs.scheme }}
         INPUT_BASE_PAGES_URL: ${{ inputs.base_pages_url }}
+        INPUT_REPO_NAME: ${{ github.event.repository.name }}
 
     - name: Upload Pages artifact
       uses: actions/upload-pages-artifact@v2
