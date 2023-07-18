@@ -4,6 +4,7 @@ author: "acarlson"
 inputs:
   branch:
     description: "branch to build documentation from"
+    default: ${{ github.event.inputs.branch }}
     required: true
   scheme:
     description: "xcode scheme to publish"
