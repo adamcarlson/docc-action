@@ -67,6 +67,7 @@ runs:
         <a href="$DOCS_URL">
           this link
         </a>.
+        ENDOFFILE
 
       env:
         INPUT_SCHEME: ${{ inputs.scheme }}
